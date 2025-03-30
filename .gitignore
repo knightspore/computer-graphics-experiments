@@ -1,0 +1,6 @@
+# Project files
+satellite
+
+# Coverage etc.
+*.gcda 
+*.gcno
