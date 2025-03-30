@@ -1,3 +1,4 @@
+#include <math.h>
 #include <raylib.h>
 #include <raymath.h>
 #include <stdlib.h>
@@ -90,19 +91,29 @@ void updatePlayer(Player *p) {
 
     p->crosshair = GetScreenToWorldRay(GetMousePosition(), p->cam).position;
     p->crosshairScreen = GetWorldToScreen(p->crosshair, p->cam);
+    // Manage bounds
+    if (p->crosshairScreen.x < GAP) p->crosshairScreen.x = GAP;
+    if (p->crosshairScreen.x > GetScreenWidth() - GAP) p->crosshairScreen.x = GetScreenWidth() - GAP;
+    if (p->crosshairScreen.y < GAP) p->crosshairScreen.y = GAP;
+    if (p->crosshairScreen.y > GetScreenHeight() - GAP) p->crosshairScreen.y = GetScreenHeight() - GAP;
 }
 
 void drawPlayerUI2D(Player *p) {
     Vector2 dxTop = {p->crosshairScreen.x, GAP};
-    DrawLineEx(dxTop, Vector2Add(dxTop, (Vector2){0.0f, GAP}), 2.0f, RAYWHITE);
+    DrawCircleLines(dxTop.x, dxTop.y + GAP / 2.0, GAP / 4.0, RAYWHITE);
     DrawText(TextFormat("[ %.2f ]", p->crosshair.x), dxTop.x + GAP, dxTop.y, GAP, RAYWHITE);
 
     Vector2 dyLeft = {GAP, p->crosshairScreen.y - p->vPosTexture.height / 4.0};
     DrawTextureEx(p->vPosTexture, dyLeft, 0.0, 0.5, RAYWHITE);
+    Vector2 dyRight = {GetScreenWidth() - (p->vPosTexture.width / 2.0 + GAP), p->crosshairScreen.y + p->vPosTexture.height / 4.0};
+    DrawTextureEx(p->vPosTexture, dyRight, 270.0, 0.5, RAYWHITE);
 
-
-    Vector2 cross = {p->crosshairScreen.x - p->crosshairTexture.width / 4.0, p->crosshairScreen.y - p->crosshairTexture.height / 4.0};
-    DrawTextureEx(p->crosshairTexture, cross, 0.0, 0.5, RAYWHITE);
+    Vector2 cross = {p->crosshairScreen.x, p->crosshairScreen.y};
+    DrawTexturePro(p->crosshairTexture,
+                   (Rectangle){0, 0, p->crosshairTexture.width, p->crosshairTexture.height},
+                   (Rectangle){cross.x, cross.y, p->crosshairTexture.width / 2.0, p->crosshairTexture.height / 2.0},
+                   (Vector2){p->crosshairTexture.width / 4.0, p->crosshairTexture.height / 4.0},
+                   sin(GetTime()) * 360, RAYWHITE); // Draw the crosshair texture with a custom rectangle
 
     Vector2 dxTextureBtm = {p->crosshairScreen.x - p->hPosTexture.width / 4.0, GetScreenHeight() - (p->hPosTexture.height / 2.0 + GAP)};
     DrawTextureEx(p->hPosTexture, dxTextureBtm, 0.0, 0.5, RAYWHITE);

@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-std=c2x -Wall -Wextra -Werror -g -ftest-coverage -fprofile-arcs -coverage
-LDFLAGS=-lraylib
+LDFLAGS=-lraylib -lm
 
 build: satellite.c
 	$(CC) satellite.c $(CFLAGS) $(LDFLAGS) -o satellite
