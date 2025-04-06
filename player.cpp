@@ -1,5 +1,6 @@
 #include "player.h"
 #include "raylib.h"
+#include <cstdio>
 #include <stdlib.h>
 
 Player *NewPlayer() {
@@ -61,11 +62,13 @@ void UpdatePlayer(Player *p) {
         p->cam.fovy -= 1.f;
     }
 
-    p->crosshair = GetScreenToWorldRay(GetMousePosition(), p->cam).position;
+    RayCollision collision = GetRayCollisionSphere(GetScreenToWorldRay(GetMousePosition(), p->cam), Vector3{0}, 10.0);
+    if (collision.hit) p->crosshair = collision.point;
     p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), Vector2{SCREEN_RECT.x, SCREEN_RECT.y}, Vector2{SCREEN_RECT.width, SCREEN_RECT.height});
 }
 
 void DrawPlayerUI(Player *p) {
+
     // Draw Horizontal Indicator Top
     Vector2 dxTop = {p->crosshairScreen.x, SCREEN_RECT.y};
     DrawCircleLines(dxTop.x, dxTop.y + GAP / 2.0, GAP / 4.0, RAYWHITE);
@@ -87,5 +90,6 @@ void DrawPlayerUI(Player *p) {
                    Rectangle{0.0f, 0.0f, float(p->crosshairTexture.width), float(p->crosshairTexture.height)},
                    Rectangle{cross.x, cross.y, p->crosshairTexture.width / 2.0f, p->crosshairTexture.height / 2.0f},
                    Vector2{p->crosshairTexture.width / 4.0f, p->crosshairTexture.height / 4.0f},
-                   fmod(GetTime() * 45, 360), RAYWHITE); // Draw the crosshair texture with a custom rectangle
+                   0.0f,
+                   RAYWHITE);
 }
