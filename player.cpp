@@ -3,6 +3,8 @@
 #include "raymath.h"
 #include <stdlib.h>
 
+float TRACKING_SPEED = 0.025f;
+
 Player *NewPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
     p->cam = Camera{
@@ -55,17 +57,15 @@ void UpdatePlayer(Player *p) {
     RayCollision collision = GetRayCollisionSphere(mouseRay, Vector3{0}, GLOBE_SIZE);
     if (collision.hit)
         p->crosshair = collision.point;
-    // else {
-    //     collision = GetRayCollisionBox(mouseRay, BoundingBox{Vector3{-GLOBE_SIZE * 10, 0, -GLOBE_SIZE * 10}, Vector3{GLOBE_SIZE * 10, 0, GLOBE_SIZE * 10}});
-    //     if (collision.hit) {
-    //         p->crosshair = Vector3Scale(collision.point, GLOBE_SIZE);
-    //     }
-    // }
+    else {
+        p->crosshair = Vector3{0, 0, 0};
+    }
 
-    p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), Vector2{SCREEN_RECT.x, SCREEN_RECT.y}, Vector2{SCREEN_RECT.width, SCREEN_RECT.height});
+    p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), {0,0}, {float(GetScreenWidth()), float(GetScreenHeight())});
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
-    DrawCylinderEx(p->crosshair, Vector3Scale(p->crosshair, 1.1f), 0.0, 1.0, 4, RED);
-    DrawCylinderWiresEx(p->crosshair, Vector3Scale(p->crosshair, 1.1f), 0.0, 1.0, 4, RAYWHITE);
+    Vector3 end = Vector3Scale(p->crosshair, 1.1f);
+    DrawCylinderEx(p->crosshair, end, 0.0, 1.0, 4, RAYWHITE);
+    DrawCylinderWiresEx(p->crosshair, end, 0.0, 1.0, 4, BLACK);
 }

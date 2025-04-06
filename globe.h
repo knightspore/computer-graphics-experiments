@@ -10,6 +10,7 @@ extern float GLOBE_SIZE;
 typedef struct {
     Model sphere;
     float rotation;
+    float scale;
 } Globe;
 
 Globe *NewGlobe();

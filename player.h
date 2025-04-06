@@ -1,14 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "globe.h"
 #include "raylib.h"
 #include "raymath.h"
 
 extern int W, H;
 extern float GAP;
-extern float TRACKING_SPEED;
 extern float GLOBE_SIZE;
-extern Rectangle SCREEN_RECT;
+extern Globe* g;
 
 typedef struct {
     Camera3D cam;
