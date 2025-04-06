@@ -1,8 +1,9 @@
-#include "imgui/imgui.h"
-#include "player.h"
-#include "raylib.h"
-#include "rlimgui/rlImGui.h"
 #include <stdlib.h>
+#include "player.h"
+#include "globe.h"
+#include "raylib.h"
+#include "imgui/imgui.h"
+#include "rlimgui/rlImGui.h"
 
 bool DEBUG = false;
 int W = 800;
@@ -12,35 +13,6 @@ float TRACKING_SPEED = 0.025f;
 float DRIFT = 0.005f;
 float GLOBE_SIZE = 20.0f;
 Rectangle SCREEN_RECT = {GAP, GAP, W - GAP, H - GAP};
-
-typedef struct {
-    Model sphere;
-    float rotation;
-} Globe;
-
-Globe *NewGlobe() {
-    Globe *globe = (Globe *)malloc(sizeof(Globe));
-    globe->rotation = 0.0;
-    globe->sphere = LoadModelFromMesh(GenMeshSphere(GLOBE_SIZE, 16, 16));
-    globe->sphere.materials[0].shader = LoadShader("resources/shaders/globe.vert", "resources/shaders/globe.frag");
-    return globe;
-}
-
-void CleanupGlobe(Globe *g) {
-    UnloadShader(g->sphere.materials[0].shader);
-    UnloadModel(g->sphere);
-    free(g);
-}
-
-void UpdateGlobe(Globe *g) {
-    g->rotation += DRIFT;
-}
-
-void DrawGlobe3D(Globe *g) {
-    DrawModelEx(g->sphere, Vector3{0}, Vector3{0, 0, 1}, g->rotation, Vector3{1, 1, 1}, GRAY);
-}
-
-// Game
 
 Player *p;
 Globe *g;
