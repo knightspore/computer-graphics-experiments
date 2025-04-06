@@ -6,7 +6,7 @@ int W = 800;
 int H = 800;
 float GAP = 16.0;
 float TRACKING_SPEED = 0.025f;
-Vector3 DRIFT_VECTOR = {0.01f, 0.0f, 0.005f};
+float DRIFT = 0.005f;
 Rectangle SCREEN_RECT = {GAP, GAP, W - GAP, H - GAP};
 
 typedef struct {
@@ -27,7 +27,11 @@ void CleanupGlobe(Globe *g) {
 }
 
 void UpdateGlobe(Globe *g) {
-    g->rotation += DRIFT_VECTOR.z;
+    g->rotation += DRIFT;
+}
+
+void DrawGlobe3D(Globe *g) {
+    DrawModelEx(g->sphere, Vector3{0}, Vector3{0, 0, 1}, g->rotation, Vector3{1, 1, 1}, GRAY);
 }
 
 // Game
@@ -36,7 +40,6 @@ Player *p;
 Globe *g;
 
 void update() {
-    // Update screen size
     if (IsWindowResized()) {
         W = GetScreenWidth();
         H = GetScreenHeight();
@@ -51,10 +54,11 @@ void draw() {
     ClearBackground(BLACK);
 
     BeginMode3D(p->cam);
-    DrawModelWiresEx(g->sphere, Vector3{0}, Vector3{0,0,1}, g->rotation, Vector3{1, 1, 1}, RAYWHITE);
+    DrawGlobe3D(g);
+    DrawPlayerCursor3D(p);
     EndMode3D();
 
-    DrawPlayerUI(p);
+    DrawPlayerUI2D(p);
 
     EndDrawing();
 }

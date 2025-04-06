@@ -4,16 +4,15 @@
 #include "raylib.h"
 #include "raymath.h"
 
+extern int W, H;
 extern float GAP;
 extern Rectangle SCREEN_RECT;
-extern Vector3 DRIFT_VECTOR;
 extern float TRACKING_SPEED;
 
 typedef struct {
     Camera3D cam;
     Vector3 crosshair;
     Vector2 crosshairScreen;
-    Texture2D crosshairTexture;
     Texture2D hPosTexture;
     Texture2D vPosTexture;
 } Player;
@@ -21,6 +20,7 @@ typedef struct {
 Player *NewPlayer();
 void CleanupPlayer(Player *p);
 void UpdatePlayer(Player *p);
-void DrawPlayerUI(Player *p);
+void DrawPlayerUI2D(Player *p);
+void DrawPlayerCursor3D(Player *p);
 
 #endif // PLAYER_H

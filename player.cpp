@@ -1,5 +1,6 @@
 #include "player.h"
 #include "raylib.h"
+#include "raymath.h"
 #include <cstdio>
 #include <stdlib.h>
 
@@ -12,7 +13,9 @@ Player *NewPlayer() {
     p->cam.fovy = 60.0f;
     p->cam.projection = CAMERA_PERSPECTIVE;
 
-    p->crosshairTexture = LoadTexture("resources/textures/reticle.png");
+    p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
+    p->crosshairScreen = Vector2{float(W / 2.0f), float(H / 2.0f)};
+
     p->hPosTexture = LoadTexture("resources/textures/h_indicator_bottom.png");
     p->vPosTexture = LoadTexture("resources/textures/v_indicator.png");
 
@@ -20,19 +23,12 @@ Player *NewPlayer() {
 }
 
 void CleanupPlayer(Player *p) {
-    UnloadTexture(p->crosshairTexture);
     UnloadTexture(p->hPosTexture);
     UnloadTexture(p->vPosTexture);
     free(p);
 }
 
 void UpdatePlayer(Player *p) {
-
-    // DRIFT
-    // p->cam.position = Vector3Add(p->cam.position, DRIFT_VECTOR);
-    // p->cam.target = Vector3Add(p->cam.target, DRIFT_VECTOR);
-
-    // Player movement
     if (IsKeyDown(KEY_W)) {
         p->cam.position.z -= TRACKING_SPEED;
         p->cam.target.z -= TRACKING_SPEED;
@@ -62,34 +58,36 @@ void UpdatePlayer(Player *p) {
         p->cam.fovy -= 1.f;
     }
 
-    RayCollision collision = GetRayCollisionSphere(GetScreenToWorldRay(GetMousePosition(), p->cam), Vector3{0}, 10.0);
-    if (collision.hit) p->crosshair = collision.point;
+    Ray mouseRay = GetScreenToWorldRay(GetMousePosition(), p->cam);
+    RayCollision collision = GetRayCollisionSphere(mouseRay, Vector3{0}, 10.0);
+    if (collision.hit)
+        p->crosshair = collision.point;
+    else {
+        collision = GetRayCollisionBox(mouseRay, BoundingBox{Vector3{-100, 0, -100}, Vector3{100, 0, 100}});
+        if (collision.hit) {
+            p->crosshair = Vector3Scale(Vector3Normalize(collision.point), 10.0f);
+        }
+    }
+
     p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), Vector2{SCREEN_RECT.x, SCREEN_RECT.y}, Vector2{SCREEN_RECT.width, SCREEN_RECT.height});
 }
 
-void DrawPlayerUI(Player *p) {
-
+void DrawPlayerUI2D(Player *p) {
     // Draw Horizontal Indicator Top
     Vector2 dxTop = {p->crosshairScreen.x, SCREEN_RECT.y};
     DrawCircleLines(dxTop.x, dxTop.y + GAP / 2.0, GAP / 4.0, RAYWHITE);
-    DrawText(TextFormat("[ %.2f ]", p->crosshair.x), dxTop.x + GAP, dxTop.y, GAP, RAYWHITE);
 
     // Draw Horizontal Indicator Bottom
     Vector2 dxTextureBtm = {p->crosshairScreen.x - p->hPosTexture.width / 4.0f, GetScreenHeight() - (p->hPosTexture.height / 2.0f + GAP)};
     DrawTextureEx(p->hPosTexture, dxTextureBtm, 0.0, 0.5, RAYWHITE);
 
     // Draw Vertical Indicator Left / Right
-    Vector2 dyLeft = {float(GAP), p->crosshairScreen.y - p->vPosTexture.height / 4.0f};
+    Vector2 dyLeft = {SCREEN_RECT.x, p->crosshairScreen.y - p->vPosTexture.height / 4.0f};
     DrawTextureEx(p->vPosTexture, dyLeft, 0.0, 0.5, RAYWHITE);
-    Vector2 dyRight = {GetScreenWidth() - (p->vPosTexture.width / 2.0f + GAP), p->crosshairScreen.y + p->vPosTexture.height / 4.0f};
+    Vector2 dyRight = {SCREEN_RECT.width - (p->vPosTexture.width / 2.0f), p->crosshairScreen.y + p->vPosTexture.height / 4.0f};
     DrawTextureEx(p->vPosTexture, dyRight, 270.0, 0.5, RAYWHITE);
+}
 
-    // Draw Crosshair
-    Vector2 cross = {p->crosshairScreen.x, p->crosshairScreen.y};
-    DrawTexturePro(p->crosshairTexture,
-                   Rectangle{0.0f, 0.0f, float(p->crosshairTexture.width), float(p->crosshairTexture.height)},
-                   Rectangle{cross.x, cross.y, p->crosshairTexture.width / 2.0f, p->crosshairTexture.height / 2.0f},
-                   Vector2{p->crosshairTexture.width / 4.0f, p->crosshairTexture.height / 4.0f},
-                   0.0f,
-                   RAYWHITE);
+void DrawPlayerCursor3D(Player *p) {
+    DrawCylinderWiresEx(Vector3Scale(p->crosshair, 1.05f), Vector3Scale(p->crosshair, 1.2f), 1.0, 0.0, 4, RED);
 }
