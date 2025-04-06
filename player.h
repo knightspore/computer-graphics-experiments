@@ -6,21 +6,19 @@
 
 extern int W, H;
 extern float GAP;
-extern Rectangle SCREEN_RECT;
 extern float TRACKING_SPEED;
+extern float GLOBE_SIZE;
+extern Rectangle SCREEN_RECT;
 
 typedef struct {
     Camera3D cam;
     Vector3 crosshair;
     Vector2 crosshairScreen;
-    Texture2D hPosTexture;
-    Texture2D vPosTexture;
 } Player;
 
 Player *NewPlayer();
 void CleanupPlayer(Player *p);
 void UpdatePlayer(Player *p);
-void DrawPlayerUI2D(Player *p);
-void DrawPlayerCursor3D(Player *p);
+void DrawPlayerCrosshair3D(Player *p);
 
 #endif // PLAYER_H
