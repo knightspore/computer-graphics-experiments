@@ -1,4 +1,5 @@
 #include "player.h"
+#include "raylib.h"
 #include <stdlib.h>
 
 Player *NewPlayer() {
@@ -8,7 +9,7 @@ Player *NewPlayer() {
     p->cam.target = Vector3{0.0f, 0.0f, 0.0f};
     p->cam.up = Vector3{0.0f, 0.0f, -1.0f};
     p->cam.fovy = 60.0f;
-    p->cam.projection = CAMERA_ORTHOGRAPHIC;
+    p->cam.projection = CAMERA_PERSPECTIVE;
 
     p->crosshairTexture = LoadTexture("resources/textures/reticle.png");
     p->hPosTexture = LoadTexture("resources/textures/h_indicator_bottom.png");
@@ -27,8 +28,8 @@ void CleanupPlayer(Player *p) {
 void UpdatePlayer(Player *p) {
 
     // DRIFT
-    p->cam.position = Vector3Add(p->cam.position, DRIFT_VECTOR);
-    p->cam.target = Vector3Add(p->cam.target, DRIFT_VECTOR);
+    // p->cam.position = Vector3Add(p->cam.position, DRIFT_VECTOR);
+    // p->cam.target = Vector3Add(p->cam.target, DRIFT_VECTOR);
 
     // Player movement
     if (IsKeyDown(KEY_W)) {
