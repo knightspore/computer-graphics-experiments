@@ -16,9 +16,9 @@ void main() {
     vec3 lightDir = normalize(vec3(-200.0, 100.0, 0.0));
 
     // Set light intensity + ambient light
-    float diff = max(dot(worldNormal, lightDir), 0.025);
+    float diff = max(dot(worldNormal, lightDir), 0.05);
 
     // Paint the globe with the normal, with a light source
-    finalColor = vec4(fragNormal * 8 + fragColor.rgb, 1.0);
+    finalColor = vec4(fragNormal + fragColor.rgb, 1.0);
     finalColor.rgb *= diff;
 }
