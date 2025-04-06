@@ -58,6 +58,9 @@ void update() {
 
 void DrawImGUI() {
     if (DEBUG) {
+        if (IsCursorHidden()) {
+            ShowCursor();
+        }
         rlImGuiBegin();
         bool open = false;
         if (ImGui::Begin("Settings", &open)) {
@@ -66,6 +69,10 @@ void DrawImGUI() {
         }
         ImGui::End();
         rlImGuiEnd();
+    } else {
+        if (!IsCursorHidden()) {
+            HideCursor();
+        }
     }
 }
 
@@ -87,7 +94,6 @@ int main(void) {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(W, H, "satellite");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
-    HideCursor();
     SetTargetFPS(1000);
 
     p = NewPlayer();

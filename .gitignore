@@ -3,8 +3,8 @@ satellite
 satellite.dSYM
 
 # Deps
-rlimgui/*
-imgui/*
+rlimgui
+imgui
 
 # Coverage etc.
 imgui.ini
