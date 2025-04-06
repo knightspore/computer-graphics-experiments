@@ -1,9 +1,10 @@
+#include "imgui/imgui.h"
 #include "player.h"
 #include "raylib.h"
 #include "rlimgui/rlImGui.h"
-#include "imgui/imgui.h"
 #include <stdlib.h>
 
+bool DEBUG = false;
 int W = 800;
 int H = 800;
 float GAP = 16.0;
@@ -20,11 +21,13 @@ typedef struct {
 Globe *NewGlobe() {
     Globe *globe = (Globe *)malloc(sizeof(Globe));
     globe->rotation = 0.0;
-    globe->sphere = LoadModelFromMesh(GenMeshSphere(GLOBE_SIZE, 10, 10));
+    globe->sphere = LoadModelFromMesh(GenMeshSphere(GLOBE_SIZE, 16, 16));
+    globe->sphere.materials[0].shader = LoadShader("resources/shaders/globe.vert", "resources/shaders/globe.frag");
     return globe;
 }
 
 void CleanupGlobe(Globe *g) {
+    UnloadShader(g->sphere.materials[0].shader);
     UnloadModel(g->sphere);
     free(g);
 }
@@ -48,20 +51,22 @@ void update() {
         H = GetScreenHeight();
         SCREEN_RECT = Rectangle{GAP, GAP, W - GAP, H - GAP};
     }
+    if (IsKeyPressed(KEY_BACKSLASH)) DEBUG = !DEBUG;
     UpdateGlobe(g);
     UpdatePlayer(p);
 }
 
 void DrawImGUI() {
-    rlImGuiBegin();
-    bool open = false;
-    if (ImGui::Begin("Settings", &open)) {
-        ImGui::SetWindowSize(ImVec2(300, 200));
-        ImGui::SliderFloat("Scale", &GLOBE_SIZE, 5.0, 100.0);
-        ImGui::SliderFloat("Drift", &DRIFT, 0.0, 0.1);
+    if (DEBUG) {
+        rlImGuiBegin();
+        bool open = false;
+        if (ImGui::Begin("Settings", &open)) {
+            ImGui::SliderFloat("Scale", &GLOBE_SIZE, 5.0, 100.0);
+            ImGui::SliderFloat("Drift", &DRIFT, 0.0, 0.1);
+        }
+        ImGui::End();
+        rlImGuiEnd();
     }
-    ImGui::End();
-    rlImGuiEnd();
 }
 
 void draw() {
