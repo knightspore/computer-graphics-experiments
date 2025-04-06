@@ -1,4 +1,5 @@
 #include "globe.h"
+#include "raylib.h"
 
 Globe *NewGlobe() {
     Globe *globe = (Globe *)malloc(sizeof(Globe));
@@ -27,5 +28,14 @@ void DrawGlobe3D(Globe *g) {
         Vector3{0.1, 0, 1},
         g->rotation,
         Vector3{g->scale, g->scale, g->scale},
-        GRAY);
+        BLACK);
+    BeginBlendMode(BLEND_MULTIPLIED);
+    DrawModelWiresEx(
+        g->sphere,
+        Vector3{},
+        Vector3{0.1, 0, 1},
+        g->rotation,
+        Vector3{g->scale, g->scale, g->scale},
+        WHITE);
+    EndBlendMode();
 }
