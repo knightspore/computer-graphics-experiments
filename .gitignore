@@ -2,8 +2,11 @@
 satellite
 satellite.dSYM
 
-rlimgui
+# Deps
+rlimgui/*
+imgui/*
 
 # Coverage etc.
+imgui.ini
 *.gcda 
 *.gcno

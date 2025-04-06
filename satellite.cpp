@@ -1,7 +1,7 @@
 #include "player.h"
 #include "raylib.h"
 #include "rlimgui/rlImGui.h"
-#include <imgui.h>
+#include "imgui/imgui.h"
 #include <stdlib.h>
 
 int W = 800;
@@ -52,7 +52,6 @@ void update() {
     UpdatePlayer(p);
 }
 
-
 void DrawImGUI() {
     rlImGuiBegin();
     bool open = false;
@@ -78,7 +77,6 @@ void draw() {
 
     EndDrawing();
 }
-
 
 int main(void) {
     SetConfigFlags(FLAG_MSAA_4X_HINT);
