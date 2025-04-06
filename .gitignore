@@ -2,6 +2,8 @@
 satellite
 satellite.dSYM
 
+rlimgui
+
 # Coverage etc.
 *.gcda 
 *.gcno

@@ -1,8 +1,8 @@
 CC=g++
-CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -g
+CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -Wno-misleading-indentation -Wno-unused-variable -g
 COVFLAGS=-ftest-coverage -fprofile-arcs -coverage
-LDFLAGS=-lraylib
-INFILES=satellite.cpp player.cpp
+LDFLAGS=-lraylib -limgui
+INFILES=satellite.cpp player.cpp rlimgui/rlImGui.cpp
 
 build: $(INFILES)
 	$(CC) $(INFILES) $(CFLAGS) $(LDFLAGS) -o satellite
