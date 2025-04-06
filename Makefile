@@ -2,15 +2,16 @@ CC=g++
 CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -g
 COVFLAGS=-ftest-coverage -fprofile-arcs -coverage
 LDFLAGS=-lraylib -lm
+INFILES=satellite.cpp player.cpp
 
-build: satellite.cpp
-	$(CC) satellite.cpp $(CFLAGS) $(LDFLAGS) -o satellite
+build: $(INFILES)
+	$(CC) $(INFILES) $(CFLAGS) $(LDFLAGS) -o satellite
 
 build-strict:
-	$(CC) satellite.cpp $(CFLAGS) -pedantic $(LDFLAGS) -o satellite
+	$(CC) $(INFILES) $(CFLAGS) -pedantic $(LDFLAGS) -o satellite
 
 build-cover: 
-	$(CC) satellite.cpp $(CFLAGS) $(COVFLAGS) $(LDFLAGS) -o satellite
+	$(CC) $(INFILES) $(CFLAGS) $(COVFLAGS) $(LDFLAGS) -o satellite
 
 coverage:
 	make clean
