@@ -1,5 +1,6 @@
 # Project files
 satellite
+satellite.dSYM
 
 # Coverage etc.
 *.gcda 

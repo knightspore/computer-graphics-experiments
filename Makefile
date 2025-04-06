@@ -1,12 +1,16 @@
-CC=gcc
-CFLAGS=-std=c2x -Wall -Wextra -Werror -g -ftest-coverage -fprofile-arcs -coverage
+CC=g++
+CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -g
+COVFLAGS=-ftest-coverage -fprofile-arcs -coverage
 LDFLAGS=-lraylib -lm
 
-build: satellite.c
-	$(CC) satellite.c $(CFLAGS) $(LDFLAGS) -o satellite
+build: satellite.cpp
+	$(CC) satellite.cpp $(CFLAGS) $(LDFLAGS) -o satellite
 
 build-strict:
-	$(CC) satellite.c $(CFLAGS) -pedantic $(LDFLAGS) -o satellite
+	$(CC) satellite.cpp $(CFLAGS) -pedantic $(LDFLAGS) -o satellite
+
+build-cover: 
+	$(CC) satellite.cpp $(CFLAGS) $(COVFLAGS) $(LDFLAGS) -o satellite
 
 coverage:
 	make clean

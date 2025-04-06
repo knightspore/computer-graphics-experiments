@@ -1,10 +1,7 @@
 #include <math.h>
-#include <raylib.h>
-#include <raymath.h>
+#include "raylib.h"
+#include "raymath.h"
 #include <stdlib.h>
-
-#define STB_PERLIN_IMPLEMENTATION
-#include "stb_perlin.h"
 
 // WINDOW & CONFIG
 
@@ -107,23 +104,23 @@ void updatePlayer(Player *p) {
 }
 
 void drawPlayerUI2D(Player *p) {
-    Vector2 dxTop = {p->crosshairScreen.x, GAP};
+    Vector2 dxTop = {p->crosshairScreen.x, float(GAP)};
     DrawCircleLines(dxTop.x, dxTop.y + GAP / 2.0, GAP / 4.0, RAYWHITE);
     DrawText(TextFormat("[ %.2f ]", p->crosshair.x), dxTop.x + GAP, dxTop.y, GAP, RAYWHITE);
 
-    Vector2 dyLeft = {GAP, p->crosshairScreen.y - p->vPosTexture.height / 4.0};
+    Vector2 dyLeft = {float(GAP), p->crosshairScreen.y - p->vPosTexture.height / 4.0f};
     DrawTextureEx(p->vPosTexture, dyLeft, 0.0, 0.5, RAYWHITE);
-    Vector2 dyRight = {GetScreenWidth() - (p->vPosTexture.width / 2.0 + GAP), p->crosshairScreen.y + p->vPosTexture.height / 4.0};
+    Vector2 dyRight = {GetScreenWidth() - (p->vPosTexture.width / 2.0f + GAP), p->crosshairScreen.y + p->vPosTexture.height / 4.0f};
     DrawTextureEx(p->vPosTexture, dyRight, 270.0, 0.5, RAYWHITE);
 
     Vector2 cross = {p->crosshairScreen.x, p->crosshairScreen.y};
     DrawTexturePro(p->crosshairTexture,
-                   (Rectangle){0, 0, p->crosshairTexture.width, p->crosshairTexture.height},
-                   (Rectangle){cross.x, cross.y, p->crosshairTexture.width / 2.0, p->crosshairTexture.height / 2.0},
-                   (Vector2){p->crosshairTexture.width / 4.0, p->crosshairTexture.height / 4.0},
+                   (Rectangle){0.0f, 0.0f, float(p->crosshairTexture.width), float(p->crosshairTexture.height)},
+                   (Rectangle){cross.x, cross.y, p->crosshairTexture.width / 2.0f, p->crosshairTexture.height / 2.0f},
+                   (Vector2){p->crosshairTexture.width / 4.0f, p->crosshairTexture.height / 4.0f},
                    fmod(GetTime() * 45, 360), RAYWHITE); // Draw the crosshair texture with a custom rectangle
 
-    Vector2 dxTextureBtm = {p->crosshairScreen.x - p->hPosTexture.width / 4.0, GetScreenHeight() - (p->hPosTexture.height / 2.0 + GAP)};
+    Vector2 dxTextureBtm = {p->crosshairScreen.x - p->hPosTexture.width / 4.0f, GetScreenHeight() - (p->hPosTexture.height / 2.0f + GAP)};
     DrawTextureEx(p->hPosTexture, dxTextureBtm, 0.0, 0.5, RAYWHITE);
 }
 
@@ -146,7 +143,7 @@ void cleanupMap(Map *m) {
 void drawMap3D(Map *m) {
     for (float y = 0; y <= m->height; y++) {
         for (float x = 0; x <= m->width; x++) {
-            Vector3 pos = {x - m->width / 2.0, 0.0f, y - m->height / 2.0};
+            Vector3 pos = {x - m->width / 2.0f, 0.0f, y - m->height / 2.0f};
             DrawPoint3D(pos, GRAY);
             if ((int)(x+y) % 17 == 0) {
                 DrawCubeWiresV(pos, (Vector3){1.0f, 5.0f, 1.0f}, RAYWHITE);
