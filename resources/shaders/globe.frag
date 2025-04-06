@@ -13,12 +13,12 @@ void main() {
     vec3 worldNormal = normalize(mat3(matModel) * fragNormal);
 
     // Set light source direction
-    vec3 lightDir = normalize(vec3(20.0, 20.0, 1.0));
+    vec3 lightDir = normalize(vec3(-200.0, 100.0, 0.0));
 
-    // Set light color
-    float diff = max(dot(worldNormal, lightDir), 0.0);
+    // Set light intensity + ambient light
+    float diff = max(dot(worldNormal, lightDir), 0.025);
 
     // Paint the globe with the normal, with a light source
-    finalColor = vec4(fragNormal+fragColor.rgb, 1.0);
+    finalColor = vec4(fragNormal * 8 + fragColor.rgb, 1.0);
     finalColor.rgb *= diff;
 }
