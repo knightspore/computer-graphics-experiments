@@ -38,6 +38,7 @@ void draw() {
         if (ImGui::Begin("Settings", &DEBUG)) {
             ImGui::SliderFloat("Drift", &DRIFT, 0.0, 10.0);
             ImGui::SliderFloat("Globe Size", &GLOBE_SIZE, 1.0, 500.0);
+            ImGui::Text("Camera [%.2f, %.2f, %.2f]", p->cam.position.x, p->cam.position.y, p->cam.position.z);
         }
         ImGui::End();
         rlImGuiEnd();

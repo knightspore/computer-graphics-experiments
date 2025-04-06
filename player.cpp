@@ -24,44 +24,17 @@ void CleanupPlayer(Player *p) {
 }
 
 void UpdatePlayer(Player *p) {
-    if (IsKeyDown(KEY_W)) {
-        p->cam.position.z -= TRACKING_SPEED;
-        p->cam.target.z -= TRACKING_SPEED;
-    }
-    if (IsKeyDown(KEY_S)) {
-        p->cam.position.z += TRACKING_SPEED;
-        p->cam.target.z += TRACKING_SPEED;
-    }
-    if (IsKeyDown(KEY_A)) {
-        p->cam.position.x -= TRACKING_SPEED;
-        p->cam.target.x -= TRACKING_SPEED;
-    }
-    if (IsKeyDown(KEY_D)) {
-        p->cam.position.x += TRACKING_SPEED;
-        p->cam.target.x += TRACKING_SPEED;
-    }
-    if (IsKeyDown(KEY_LEFT_BRACKET)) {
-        if (p->cam.fovy >= 90.f) {
-            return;
-        }
-        p->cam.fovy += 1.f;
-    }
-    if (IsKeyDown(KEY_RIGHT_BRACKET)) {
-        if (p->cam.fovy < 20.f) {
-            return;
-        }
-        p->cam.fovy -= 1.f;
-    }
+    if (IsKeyDown(KEY_W)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, }, TRACKING_SPEED);
+    if (IsKeyDown(KEY_S)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0}, TRACKING_SPEED);
+    if (IsKeyDown(KEY_A)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, 1}, TRACKING_SPEED);
+    if (IsKeyDown(KEY_D)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, -1}, TRACKING_SPEED);
 
-    Ray mouseRay = GetScreenToWorldRay(GetMousePosition(), p->cam);
-    RayCollision collision = GetRayCollisionSphere(mouseRay, Vector3{0}, GLOBE_SIZE);
-    if (collision.hit)
-        p->crosshair = collision.point;
-    else {
-        p->crosshair = Vector3{0, 0, 0};
-    }
+    if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 90.f) p->cam.fovy += 1.f;
+    if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 20.f) p->cam.fovy -= 1.f;
 
-    p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), {0,0}, {float(GetScreenWidth()), float(GetScreenHeight())});
+    RayCollision collision = GetRayCollisionSphere(GetScreenToWorldRay(GetMousePosition(), p->cam), Vector3{0}, GLOBE_SIZE);
+    p->crosshair = collision.hit ? collision.point : Vector3{0, 0, 0};
+    p->crosshairScreen = Vector2Clamp(GetWorldToScreen(p->crosshair, p->cam), {0, 0}, {float(GetScreenWidth()), float(GetScreenHeight())});
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
