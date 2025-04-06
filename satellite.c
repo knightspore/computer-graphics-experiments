@@ -8,6 +8,7 @@
 
 // WINDOW & CONFIG
 
+int SEED = 1337;
 int W = 800;
 int H = 800;
 int FPS = 120;
@@ -39,7 +40,7 @@ typedef struct {
 Player *newPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
 
-    p->cam.position = (Vector3){0.0f, 10.0f, 0.0f};
+    p->cam.position = (Vector3){5.0f, 50.0f, 5.0f};
     p->cam.target = (Vector3){0.0f, 0.0f, 0.0f};
     p->cam.up = (Vector3){0.0f, 0.0f, -1.0f};
     p->cam.fovy = 60.0f;
@@ -55,6 +56,7 @@ Player *newPlayer() {
 void cleanupPlayer(Player *p) {
     UnloadTexture(p->crosshairTexture);
     UnloadTexture(p->hPosTexture);
+    UnloadTexture(p->vPosTexture);
     free(p);
 }
 
@@ -83,12 +85,18 @@ void updatePlayer(Player *p) {
         p->cam.target.x += TRACKING_SPEED;
     }
     if (IsKeyDown(KEY_LEFT_BRACKET)) {
-        p->cam.fovy += 0.1f;
+        if (p->cam.fovy >= 90.f) {
+            return;
+        }
+        p->cam.fovy += 1.f;
     }
     if (IsKeyDown(KEY_RIGHT_BRACKET)) {
-        p->cam.fovy -= 0.1f;
+        if (p->cam.fovy < 20.f) {
+            return;
+        }
+        p->cam.fovy -= 1.f;
     }
-
+    
     p->crosshair = GetScreenToWorldRay(GetMousePosition(), p->cam).position;
     p->crosshairScreen = GetWorldToScreen(p->crosshair, p->cam);
     // Manage bounds
@@ -113,7 +121,7 @@ void drawPlayerUI2D(Player *p) {
                    (Rectangle){0, 0, p->crosshairTexture.width, p->crosshairTexture.height},
                    (Rectangle){cross.x, cross.y, p->crosshairTexture.width / 2.0, p->crosshairTexture.height / 2.0},
                    (Vector2){p->crosshairTexture.width / 4.0, p->crosshairTexture.height / 4.0},
-                   sin(GetTime()) * 360, RAYWHITE); // Draw the crosshair texture with a custom rectangle
+                   fmod(GetTime() * 45, 360), RAYWHITE); // Draw the crosshair texture with a custom rectangle
 
     Vector2 dxTextureBtm = {p->crosshairScreen.x - p->hPosTexture.width / 4.0, GetScreenHeight() - (p->hPosTexture.height / 2.0 + GAP)};
     DrawTextureEx(p->hPosTexture, dxTextureBtm, 0.0, 0.5, RAYWHITE);
@@ -136,9 +144,14 @@ void cleanupMap(Map *m) {
 }
 
 void drawMap3D(Map *m) {
-    for (float y = -(m->height / 2); y <= (m->height / 2); y++) {
-        for (float x = -(m->width / 2); x <= (m->width / 2); x++) {
-            DrawPoint3D((Vector3){x, 1.0f, y}, GRAY); // Map placeholder
+    for (float y = 0; y <= m->height; y++) {
+        for (float x = 0; x <= m->width; x++) {
+            Vector3 pos = {x - m->width / 2.0, 0.0f, y - m->height / 2.0};
+            DrawPoint3D(pos, GRAY);
+            if ((int)(x+y) % 17 == 0) {
+                DrawCubeWiresV(pos, (Vector3){1.0f, 5.0f, 1.0f}, RAYWHITE);
+            } else {
+            }
         }
     }
 }
@@ -176,6 +189,7 @@ int main(void) {
     while (!WindowShouldClose()) {
         update(p);
         draw(m, p);
+        DrawFPS(10, 10);
     }
 
     cleanupPlayer(p);
