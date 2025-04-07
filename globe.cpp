@@ -50,7 +50,7 @@ Vector3 GetGlobeCollision(Ray ray) {
 
 Vector3 GetGlobeSurface(Vector3 point) {
     Vector3 surface = Vector3Normalize(point);
-    return Vector3Scale(surface, cfg->EARTH_RADIUS);
+    return Vector3Scale(surface, EARTH_RADIUS);
 }
 
 Vector3 GetGlobeSurfaceHeight(Vector3 point, float height) {

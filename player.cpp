@@ -1,11 +1,12 @@
 #include "player.h"
+#include "globe.h"
 #include "raylib.h"
 #include "raymath.h"
 #include <cmath>
 #include <stdlib.h>
 
-float TRACKING_SPEED = 0.025f;
-float PLAYER_HEIGHT = (6378.0f + 2000.0f) * (1.0f / 100.0f); // @TODO: Clean up all the magic numbers
+float PLAYER_HEIGHT = (6371.0f + 2000.0f) * SCALE;
+float TRACKING_SPEED = 0.1f;
 
 Player *NewPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
@@ -17,6 +18,7 @@ Player *NewPlayer() {
         .projection = CAMERA_PERSPECTIVE,
     };
     p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
+    p->nextTarget = Vector3{0.0f, 0.0f, 0.0f};
     return p;
 }
 
@@ -25,17 +27,22 @@ void CleanupPlayer(Player *p) {
 }
 
 void UpdatePlayer(Player *p) {
+    p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
+
     if (IsKeyDown(KEY_W)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0}, TRACKING_SPEED);
     if (IsKeyDown(KEY_S)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0}, TRACKING_SPEED);
     if (IsKeyDown(KEY_A)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, 1}, TRACKING_SPEED);
     if (IsKeyDown(KEY_D)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, -1}, TRACKING_SPEED);
     if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 180.f) p->cam.fovy += 1.f;
     if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 5.f) p->cam.fovy -= 1.f;
-    p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        p->cam.target = Vector3MoveTowards(p->cam.target, p->crosshair, TRACKING_SPEED);
+    }
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
-    Vector3 end = Vector3MoveTowards(p->crosshair, Vector3Scale(p->crosshair, 1.8f), 0.8f);
+    Vector3 end = GetGlobeSurfaceHeight(p->crosshair, 0.8f);
     float amt = Clamp(std::sin(GetTime() * 4), 0.2, 0.8);
     DrawCylinderEx(p->crosshair, end, 0.8, 0.8, 4, Fade(RED, amt));
     DrawCylinderWiresEx(p->crosshair, end, 0.8, 0.8, 4, RED);
