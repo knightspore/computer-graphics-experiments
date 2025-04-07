@@ -10,3 +10,4 @@ imgui
 imgui.ini
 *.gcda 
 *.gcno
+.DS_Store

@@ -6,16 +6,31 @@ float EARTH_RADIUS = 6371.0f * SCALE;
 float EARTH_ROTATION = 1.600f * SCALE;
 float GLOBE_LOD = 32;
 
+Image loadTexture(const char *path) {
+    Image img = LoadImage(path);
+    ImageFlipVertical(&img);
+    ImageRotate(&img, -90);
+    return img;
+}
+
 Globe *NewGlobe() {
     Globe *globe = (Globe *)malloc(sizeof(Globe));
     globe->rotation = 0.0;
     globe->sphere = LoadModelFromMesh(GenMeshSphere(EARTH_RADIUS, GLOBE_LOD, GLOBE_LOD));
     globe->sphere.materials[0].shader = LoadShader("resources/shaders/globe.vert", "resources/shaders/globe.frag");
-    Image texImg = LoadImage("resources/textures/2k_earth_daymap.jpg");
-    ImageFlipVertical(&texImg);
-    ImageRotate(&texImg, -90);
-    globe->sphere.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTextureFromImage(texImg);
-    UnloadImage(texImg);
+
+    Image diffuseTex = loadTexture("resources/textures/8k_earth_daymap.jpg"); // @TODO: Load based on LOD
+    globe->sphere.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTextureFromImage(diffuseTex);
+    UnloadImage(diffuseTex);
+
+    Image specularTex = loadTexture("resources/textures/8k_earth_specular_map.jpg");
+    globe->sphere.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = LoadTextureFromImage(specularTex);
+    UnloadImage(specularTex);
+
+    Image normalTex = loadTexture("resources/textures/8k_earth_normal_map.jpg");
+    globe->sphere.materials[0].maps[MATERIAL_MAP_NORMAL].texture = LoadTextureFromImage(normalTex);
+    UnloadImage(normalTex);
+
     return globe;
 }
 
