@@ -1,8 +1,8 @@
 #include "globe.h"
 #include "raylib.h"
 
-float EARTH_RADIUS = 6371.0f * SCALE; // in kilometers
-float EARTH_DRIFT = 1600.0f * SCALE;  // in kilometers per second
+float EARTH_RADIUS = 6371.0f * SCALE;
+float EARTH_ROTATION = 1.600f * SCALE;
 float GLOBE_LOD = 32;
 
 Globe *NewGlobe() {
@@ -26,7 +26,10 @@ void CleanupGlobe(Globe *g) {
 }
 
 void UpdateGlobe(Globe *g) {
-    g->rotation += EARTH_DRIFT * GetFrameTime();
+    g->rotation += EARTH_ROTATION * GetFrameTime();
+    if (g->rotation > 360.0f) {
+        g->rotation -= 360.0f;
+    }
 }
 
 void DrawGlobe3D(Globe *g) {
