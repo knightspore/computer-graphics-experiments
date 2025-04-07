@@ -5,9 +5,6 @@
 #include "raylib.h"
 #include "raymath.h"
 
-extern int W, H;
-extern float GAP;
-extern float GLOBE_SIZE;
 extern Globe* g;
 
 typedef struct {

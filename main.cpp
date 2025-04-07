@@ -9,7 +9,6 @@ bool DEBUG = false;
 float SCALE = 1.0f / 100.0f;
 int W = 800;
 int H = 800;
-float GLOBE_SIZE = 20.0f;
 
 Player *p;
 Globe *g;
@@ -43,8 +42,13 @@ void draw() {
         rlImGuiBegin();
         bool open = false;
         if (ImGui::Begin("Settings", &DEBUG)) {
-            ImGui::SliderFloat("Globe Size", &GLOBE_SIZE, 1.0, 500.0);
             ImGui::Text("Camera [%.2f, %.2f, %.2f]", p->cam.position.x, p->cam.position.y, p->cam.position.z);
+            ImGui::SliderFloat("Cam x", &p->cam.position.x, -100.0f, 100.0f);
+            ImGui::SliderFloat("Cam y", &p->cam.position.y, -100.0f, 100.0f);
+            ImGui::SliderFloat("Cam z", &p->cam.position.z, -100.0f, 100.0f);
+            ImGui::SliderFloat("Target x", &p->cam.target.x, -100.0f, 100.0f);
+            ImGui::SliderFloat("Target y", &p->cam.target.y, -100.0f, 100.0f);
+            ImGui::SliderFloat("Target z", &p->cam.target.z, -100.0f, 100.0f);
         }
         ImGui::End();
         rlImGuiEnd();
