@@ -16,5 +16,7 @@ void CleanupGlobe(Globe *g);
 void UpdateGlobe(Globe *g);
 void DrawGlobe3D(Globe *g);
 Vector3 GetGlobeCollision(Ray ray);
+Vector3 GetGlobeSurface(Vector3 point);
+Vector3 GetGlobeSurfaceHeight(Vector3 point, float height);
 
 #endif // GLOBE_H

@@ -1,5 +1,6 @@
 #include "globe.h"
 #include "raylib.h"
+#include "raymath.h"
 
 float EARTH_RADIUS = 6371.0f * SCALE;
 float EARTH_ROTATION = 1.600f * SCALE;
@@ -45,4 +46,15 @@ void DrawGlobe3D(Globe *g) {
 Vector3 GetGlobeCollision(Ray ray) {
     RayCollision collision = GetRayCollisionSphere(ray, Vector3{0}, EARTH_RADIUS);
     return collision.hit ? collision.point : Vector3{0, 0, 0};
+}
+
+Vector3 GetGlobeSurface(Vector3 point) {
+    Vector3 surface = Vector3Normalize(point);
+    return Vector3Scale(surface, cfg->EARTH_RADIUS);
+}
+
+Vector3 GetGlobeSurfaceHeight(Vector3 point, float height) {
+    Vector3 surface = Vector3Normalize(point);
+    Vector3 distantDir = Vector3Scale(surface, 1.5f);
+    return Vector3MoveTowards(surface, distantDir, height);
 }
