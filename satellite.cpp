@@ -30,6 +30,13 @@ void draw() {
     EndMode3D();
 
     if (DEBUG) {
+        BeginMode3D(p->cam);
+        DrawGrid(100, 100.0f);
+        DrawLine3D(Vector3{-10000, 0, 0}, Vector3{10000, 0, 0}, RED); // X-axis
+        DrawLine3D(Vector3{0, 0, -10000}, Vector3{0, 0, 10000}, GREEN); // Y-axis
+        DrawLine3D(Vector3{0, -10000, 0}, Vector3{0, 10000, 0}, BLUE); // Z-axis
+        EndMode3D();
+        DrawGrid(100, 1.0f);
         if (IsCursorHidden()) {
             ShowCursor();
         }
