@@ -4,18 +4,18 @@
 #include "raylib.h"
 #include "stdlib.h"
 
+extern float SCALE;
 extern float DRIFT;
-extern float GLOBE_SIZE;
 
 typedef struct {
     Model sphere;
     float rotation;
-    float scale;
 } Globe;
 
 Globe *NewGlobe();
 void CleanupGlobe(Globe *g);
 void UpdateGlobe(Globe *g);
 void DrawGlobe3D(Globe *g);
+Vector3 GetGlobeCollision(Ray ray);
 
 #endif // GLOBE_H

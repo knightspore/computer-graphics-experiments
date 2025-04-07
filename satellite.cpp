@@ -1,11 +1,12 @@
-#include <stdlib.h>
-#include "player.h"
 #include "globe.h"
-#include "raylib.h"
 #include "imgui/imgui.h"
+#include "player.h"
+#include "raylib.h"
 #include "rlimgui/rlImGui.h"
+#include <stdlib.h>
 
 bool DEBUG = false;
+float SCALE = 1.0f / 100.0f;
 int W = 800;
 int H = 800;
 float DRIFT = 0.005f;
@@ -49,6 +50,7 @@ void draw() {
         }
         ImGui::End();
         rlImGuiEnd();
+
     } else {
         if (!IsCursorHidden()) {
             HideCursor();

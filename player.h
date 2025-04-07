@@ -13,7 +13,6 @@ extern Globe* g;
 typedef struct {
     Camera3D cam;
     Vector3 crosshair;
-    Vector2 crosshairScreen;
 } Player;
 
 Player *NewPlayer();
