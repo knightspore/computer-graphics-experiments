@@ -5,7 +5,6 @@
 #include "stdlib.h"
 
 extern float SCALE;
-extern float DRIFT;
 
 typedef struct {
     Model sphere;

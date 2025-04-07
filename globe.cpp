@@ -26,7 +26,7 @@ void CleanupGlobe(Globe *g) {
 }
 
 void UpdateGlobe(Globe *g) {
-    g->rotation += DRIFT;
+    g->rotation += EARTH_DRIFT * GetFrameTime();
 }
 
 void DrawGlobe3D(Globe *g) {

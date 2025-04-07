@@ -9,7 +9,6 @@ bool DEBUG = false;
 float SCALE = 1.0f / 100.0f;
 int W = 800;
 int H = 800;
-float DRIFT = 0.005f;
 float GLOBE_SIZE = 20.0f;
 
 Player *p;
@@ -44,7 +43,6 @@ void draw() {
         rlImGuiBegin();
         bool open = false;
         if (ImGui::Begin("Settings", &DEBUG)) {
-            ImGui::SliderFloat("Drift", &DRIFT, 0.0, 10.0);
             ImGui::SliderFloat("Globe Size", &GLOBE_SIZE, 1.0, 500.0);
             ImGui::Text("Camera [%.2f, %.2f, %.2f]", p->cam.position.x, p->cam.position.y, p->cam.position.z);
         }
