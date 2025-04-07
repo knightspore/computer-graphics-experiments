@@ -14,7 +14,7 @@ Player *NewPlayer() {
         .position = Vector3{0.0f, PLAYER_HEIGHT, 0.0f},
         .target = Vector3{0.0f, 0.0f, 0.0f},
         .up = Vector3{0.0f, 0.0f, -1.0f},
-        .fovy = 60.0f,
+        .fovy = 45.0f,
         .projection = CAMERA_PERSPECTIVE,
     };
     p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
@@ -30,11 +30,11 @@ void UpdatePlayer(Player *p) {
     p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
     p->cam.target = Vector3Lerp(p->cam.target, p->nextTarget, TRACKING_SPEED);
 
-    if (IsKeyDown(KEY_W)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0}, TRACKING_SPEED);
-    if (IsKeyDown(KEY_S)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0}, TRACKING_SPEED);
-    if (IsKeyDown(KEY_A)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, 1}, TRACKING_SPEED);
-    if (IsKeyDown(KEY_D)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, -1}, TRACKING_SPEED);
-    if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 180.f) p->cam.fovy += 1.f;
+    if (IsKeyDown(KEY_W) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
+    if (IsKeyDown(KEY_S) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
+    if (IsKeyDown(KEY_A)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, 1}, TRACKING_SPEED / 2.0f);
+    if (IsKeyDown(KEY_D)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, -1}, TRACKING_SPEED / 2.0f);
+    if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 90.f) p->cam.fovy += 1.f;
     if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 5.f) p->cam.fovy -= 1.f;
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
