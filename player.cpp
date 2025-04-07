@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 float PLAYER_HEIGHT = (6371.0f + 2000.0f) * SCALE;
-float TRACKING_SPEED = 0.1f;
+float TRACKING_SPEED = 0.01f;
 
 Player *NewPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
@@ -28,6 +28,7 @@ void CleanupPlayer(Player *p) {
 
 void UpdatePlayer(Player *p) {
     p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
+    p->cam.target = Vector3Lerp(p->cam.target, p->nextTarget, TRACKING_SPEED);
 
     if (IsKeyDown(KEY_W)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0}, TRACKING_SPEED);
     if (IsKeyDown(KEY_S)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0}, TRACKING_SPEED);
@@ -36,14 +37,21 @@ void UpdatePlayer(Player *p) {
     if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 180.f) p->cam.fovy += 1.f;
     if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 5.f) p->cam.fovy -= 1.f;
 
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        p->cam.target = Vector3MoveTowards(p->cam.target, p->crosshair, TRACKING_SPEED);
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        p->nextTarget = p->crosshair;
     }
 }
 
-void DrawPlayerCrosshair3D(Player *p) {
-    Vector3 end = GetGlobeSurfaceHeight(p->crosshair, 0.8f);
+void drawIndicator3D(Vector3 pos, Color color) {
+    Vector3 end = GetGlobeSurfaceHeight(pos, 1.0f);
     float amt = Clamp(std::sin(GetTime() * 4), 0.2, 0.8);
-    DrawCylinderEx(p->crosshair, end, 0.8, 0.8, 4, Fade(RED, amt));
-    DrawCylinderWiresEx(p->crosshair, end, 0.8, 0.8, 4, RED);
+    DrawCylinderEx(pos, end, 0.8, 0.8, 4, Fade(color, amt));
+    DrawCylinderWiresEx(pos, end, 0.8, 0.8, 4, color);
+}
+
+void DrawPlayerCrosshair3D(Player *p) {
+    drawIndicator3D(p->crosshair, RED);
+    if (Vector3Distance(p->cam.target, p->nextTarget) > 0.1) {
+        drawIndicator3D(p->nextTarget, BLUE);
+    }
 }
