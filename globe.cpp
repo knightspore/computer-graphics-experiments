@@ -3,15 +3,16 @@
 
 float EARTH_RADIUS = 6371.0f * SCALE; // in kilometers
 float EARTH_DRIFT = 1600.0f * SCALE;  // in kilometers per second
+float GLOBE_LOD = 32;
 
 Globe *NewGlobe() {
     Globe *globe = (Globe *)malloc(sizeof(Globe));
     globe->rotation = 0.0;
-    globe->sphere = LoadModelFromMesh(GenMeshSphere(EARTH_RADIUS, 16, 16));
+    globe->sphere = LoadModelFromMesh(GenMeshSphere(EARTH_RADIUS, GLOBE_LOD, GLOBE_LOD));
     globe->sphere.materials[0].shader = LoadShader("resources/shaders/globe.vert", "resources/shaders/globe.frag");
     Image texImg = LoadImage("resources/textures/2k_earth_daymap.jpg");
-    ImageRotate(&texImg, 90);
     ImageFlipVertical(&texImg);
+    ImageRotate(&texImg, -90);
     globe->sphere.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTextureFromImage(texImg);
     UnloadImage(texImg);
     return globe;
