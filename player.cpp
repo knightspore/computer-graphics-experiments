@@ -1,6 +1,7 @@
 #include "player.h"
 #include "raylib.h"
 #include "raymath.h"
+#include <cmath>
 #include <stdlib.h>
 
 float TRACKING_SPEED = 0.025f;
@@ -34,7 +35,8 @@ void UpdatePlayer(Player *p) {
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
-    Vector3 end = Vector3Scale(p->crosshair, 1.1f);
-    DrawCylinderEx(p->crosshair, end, 0.0, 1.0, 4, RAYWHITE);
-    DrawCylinderWiresEx(p->crosshair, end, 0.0, 1.0, 4, BLACK);
+    Vector3 end = Vector3MoveTowards(p->crosshair, Vector3Scale(p->crosshair, 1.8f), 0.8f);
+    float amt = Clamp(std::sin(GetTime() * 4), 0.2, 0.8);
+    DrawCylinderEx(p->crosshair, end, 0.8, 0.8, 4, Fade(RED, amt));
+    DrawCylinderWiresEx(p->crosshair, end, 0.8, 0.8, 4, RED);
 }
