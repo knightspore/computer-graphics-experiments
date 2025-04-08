@@ -7,6 +7,7 @@
 
 float PLAYER_HEIGHT = (6371.0f + 2000.0f) * SCALE;
 float TRACKING_SPEED = 0.01f;
+float FOVS[] = {4.0f, 8.0f, 16.0f, 64.0f};
 
 Player *NewPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
@@ -14,7 +15,7 @@ Player *NewPlayer() {
         .position = Vector3{0.0f, PLAYER_HEIGHT, 0.0f},
         .target = Vector3{0.0f, 0.0f, 0.0f},
         .up = Vector3{0.0f, 0.0f, -1.0f},
-        .fovy = 45.0f,
+        .fovy = FOVS[ZOOM_IDX],
         .projection = CAMERA_PERSPECTIVE,
     };
     p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
@@ -32,8 +33,8 @@ void UpdatePlayer(Player *p) {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         p->marker = p->crosshair;
     }
-    if (IsKeyPressed(KEY_LEFT_BRACKET) && p->cam.fovy <= 128.f) p->cam.fovy *= 2.0f;
-    if (IsKeyPressed(KEY_RIGHT_BRACKET) && p->cam.fovy >= 4.f) p->cam.fovy /= 2.0f;
+    if (IsKeyPressed(KEY_LEFT_BRACKET) && ZOOM_IDX < N_ZOOM_STEP) p->cam.fovy = FOVS[++ZOOM_IDX];
+    if (IsKeyPressed(KEY_RIGHT_BRACKET) && ZOOM_IDX > 0) p->cam.fovy = FOVS[--ZOOM_IDX];
 }
 
 void drawIndicator3D(Vector3 pos, Color color, bool body = false) {

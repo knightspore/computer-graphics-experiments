@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "raymath.h"
 
+extern size_t ZOOM_IDX;
+extern size_t N_ZOOM_STEP;
 extern Globe* g;
 
 typedef struct {

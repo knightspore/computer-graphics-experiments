@@ -9,6 +9,8 @@ bool DEBUG = false;
 float SCALE = 1.0f / 100.0f;
 int W = 800;
 int H = 800;
+size_t N_ZOOM_STEP = 3;
+size_t ZOOM_IDX = N_ZOOM_STEP;
 
 Player *p;
 Globe *g;
