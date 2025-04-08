@@ -7,7 +7,7 @@
 
 float PLAYER_HEIGHT = (6371.0f + 2000.0f) * SCALE;
 float TRACKING_SPEED = 0.01f;
-float FOVS[] = {4.0f, 8.0f, 16.0f, 64.0f};
+float FOVS[] = {1.0f, 8.0f, 24.0f, 90.0f};
 
 Player *NewPlayer() {
     Player *p = (Player *)malloc(sizeof(Player));
