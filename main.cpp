@@ -16,6 +16,7 @@ Globe *g;
 void update() {
     if (IsKeyPressed(KEY_BACKSLASH)) DEBUG = !DEBUG;
     if (DEBUG) {
+        // Free cam
         if (IsKeyDown(KEY_W)) p->cam.position = Vector3Add(p->cam.position, Vector3{0, -1, 0});
         if (IsKeyDown(KEY_A)) p->cam.position = Vector3Add(p->cam.position, Vector3{-1, 0, 0});
         if (IsKeyDown(KEY_S)) p->cam.position = Vector3Add(p->cam.position, Vector3{0, 1, 0});
@@ -35,19 +36,26 @@ void draw() {
     EndMode3D();
 
     if (DEBUG) {
-        // Draw World Debugs
+        // World Debugs
         BeginMode3D(p->cam);
+
         DrawGrid(100, 100.0f);
         DrawLine3D(Vector3{-10000, 0, 0}, Vector3{10000, 0, 0}, RED);   // X-axis
         DrawLine3D(Vector3{0, 0, -10000}, Vector3{0, 0, 10000}, GREEN); // Y-axis
         DrawLine3D(Vector3{0, -10000, 0}, Vector3{0, 10000, 0}, BLUE);  // Z-axis
         EndMode3D();
-        DrawGrid(100, 1.0f);
+
+        BeginBlendMode(BLEND_ADDITIVE);
+        DrawModelWiresEx(g->sphere, Vector3{}, Vector3{0.1, 0, 1}, g->rotation, Vector3{1, 1, 1}, Fade(BLACK, 0.5f));
+        EndBlendMode();
+
+        DrawFPS(10, 10);
+
         if (IsCursorHidden()) {
             ShowCursor();
         }
 
-        // Draw Debug Gui
+        // Gui
         rlImGuiBegin();
         bool open = false;
         if (ImGui::Begin("Settings", &DEBUG)) {
@@ -85,7 +93,6 @@ int main(void) {
     while (!WindowShouldClose()) {
         update();
         draw();
-        DrawFPS(10, 10);
     }
 
     CleanupGlobe(g);
