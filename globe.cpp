@@ -51,6 +51,10 @@ void UpdateGlobe(Globe *g) {
 }
 
 void DrawGlobe3D(Globe *g) {
+    if (DEBUG) {
+        DrawModelWiresEx(g->sphere, Vector3{}, Vector3{0.1, 0, 1}, g->rotation, Vector3{1, 1, 1}, Fade(BLACK, 0.5f));
+        return;
+    }
     DrawModelEx(
         g->sphere,
         Vector3{},
@@ -61,7 +65,7 @@ void DrawGlobe3D(Globe *g) {
 }
 
 Vector3 GetGlobeCollision(Ray ray) {
-    RayCollision collision = GetRayCollisionSphere(ray, Vector3{0,0,0}, EARTH_RADIUS);
+    RayCollision collision = GetRayCollisionSphere(ray, Vector3{0, 0, 0}, EARTH_RADIUS);
     return collision.hit ? collision.point : Vector3{0, 0, 0};
 }
 

@@ -19,7 +19,7 @@ Player *NewPlayer() {
         .projection = CAMERA_PERSPECTIVE,
     };
     p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
-    p->marker = Vector3{0.0f, 0.0f, 0.0f};
+    p->marker = Vector3{0.0f, 6731.0f * SCALE, 0.0f};
     return p;
 }
 

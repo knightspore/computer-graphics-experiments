@@ -47,10 +47,6 @@ void draw() {
         DrawLine3D(Vector3{0, -10000, 0}, Vector3{0, 10000, 0}, BLUE);  // Z-axis
         EndMode3D();
 
-        BeginBlendMode(BLEND_ADDITIVE);
-        DrawModelWiresEx(g->sphere, Vector3{}, Vector3{0.1, 0, 1}, g->rotation, Vector3{1, 1, 1}, Fade(BLACK, 0.5f));
-        EndBlendMode();
-
         DrawFPS(10, 10);
 
         if (IsCursorHidden()) {
