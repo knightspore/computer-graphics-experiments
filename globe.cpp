@@ -35,6 +35,8 @@ Globe *NewGlobe() {
 }
 
 void CleanupGlobe(Globe *g) {
+    UnloadTexture(g->sphere.materials[0].maps[MATERIAL_MAP_NORMAL].texture);
+    UnloadTexture(g->sphere.materials[0].maps[MATERIAL_MAP_SPECULAR].texture);
     UnloadTexture(g->sphere.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture);
     UnloadShader(g->sphere.materials[0].shader);
     UnloadModel(g->sphere);
@@ -59,7 +61,7 @@ void DrawGlobe3D(Globe *g) {
 }
 
 Vector3 GetGlobeCollision(Ray ray) {
-    RayCollision collision = GetRayCollisionSphere(ray, Vector3{0}, EARTH_RADIUS);
+    RayCollision collision = GetRayCollisionSphere(ray, Vector3{0,0,0}, EARTH_RADIUS);
     return collision.hit ? collision.point : Vector3{0, 0, 0};
 }
 
