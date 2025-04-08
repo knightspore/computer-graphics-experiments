@@ -18,7 +18,7 @@ Player *NewPlayer() {
         .projection = CAMERA_PERSPECTIVE,
     };
     p->crosshair = Vector3{0.0f, 0.0f, 0.0f};
-    p->nextTarget = Vector3{0.0f, 0.0f, 0.0f};
+    p->marker = Vector3{0.0f, 0.0f, 0.0f};
     return p;
 }
 
@@ -28,7 +28,6 @@ void CleanupPlayer(Player *p) {
 
 void UpdatePlayer(Player *p) {
     p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
-    p->cam.target = Vector3Lerp(p->cam.target, p->nextTarget, TRACKING_SPEED);
 
     if (IsKeyDown(KEY_W) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
     if (IsKeyDown(KEY_S) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
@@ -38,20 +37,20 @@ void UpdatePlayer(Player *p) {
     if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 5.f) p->cam.fovy -= 1.f;
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        p->nextTarget = p->crosshair;
+        p->marker = p->crosshair;
     }
 }
 
 void drawIndicator3D(Vector3 pos, Color color) {
-    Vector3 end = GetGlobeSurfaceHeight(pos, 1.0f);
+    Vector3 end = GetGlobeSurface(pos);
     float amt = Clamp(std::sin(GetTime() * 4), 0.2, 0.8);
-    DrawCylinderEx(pos, end, 0.8, 0.8, 4, Fade(color, amt));
-    DrawCylinderWiresEx(pos, end, 0.8, 0.8, 4, color);
+    DrawSphereEx(end, 1.0, 8, 8, Fade(color, amt));
+    DrawSphereWires(end, 1.0, 8, 8, color);
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
     drawIndicator3D(p->crosshair, RED);
-    if (Vector3Distance(p->cam.target, p->nextTarget) > 0.1) {
-        drawIndicator3D(p->nextTarget, BLUE);
+    if (Vector3Distance(p->cam.target, p->marker) > 0.1) {
+        drawIndicator3D(p->marker, BLUE);
     }
 }
