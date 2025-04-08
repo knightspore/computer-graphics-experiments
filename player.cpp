@@ -28,6 +28,7 @@ void CleanupPlayer(Player *p) {
 
 void UpdatePlayer(Player *p) {
     p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
+    p->cam.target = Vector3Lerp(p->cam.target, p->marker, TRACKING_SPEED / 2.0f);
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         p->marker = p->crosshair;
     }
@@ -35,16 +36,17 @@ void UpdatePlayer(Player *p) {
     if (IsKeyPressed(KEY_RIGHT_BRACKET) && p->cam.fovy >= 4.f) p->cam.fovy /= 2.0f;
 }
 
-void drawIndicator3D(Vector3 pos, Color color) {
+void drawIndicator3D(Vector3 pos, Color color, bool body = false) {
     Vector3 end = GetGlobeSurface(pos);
     float amt = Clamp(std::sin(GetTime() * 4), 0.2, 0.8);
-    DrawSphereEx(end, 1.0, 8, 8, Fade(color, amt));
+    if (body) DrawSphereEx(end, 1.0, 8, 8, Fade(color, amt));
     DrawSphereWires(end, 1.0, 8, 8, color);
+    DrawLine3D(end, pos, WHITE);
 }
 
 void DrawPlayerCrosshair3D(Player *p) {
     drawIndicator3D(p->crosshair, RED);
-    if (Vector3Distance(p->cam.target, p->marker) > 0.1) {
-        drawIndicator3D(p->marker, BLUE);
+    if (Vector3Distance(Vector3{}, p->marker) > 0.1) {
+        drawIndicator3D(p->marker, BLUE, true);
     }
 }
