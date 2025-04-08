@@ -4,7 +4,7 @@
 
 float EARTH_RADIUS = 6371.0f * SCALE;
 float EARTH_ROTATION = 1.600f * SCALE;
-float GLOBE_LOD = 32;
+float GLOBE_LOD = 64;
 
 Image loadTexture(const char *path) {
     Image img = LoadImage(path);
