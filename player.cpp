@@ -28,17 +28,11 @@ void CleanupPlayer(Player *p) {
 
 void UpdatePlayer(Player *p) {
     p->crosshair = GetGlobeCollision(GetScreenToWorldRay(GetMousePosition(), p->cam));
-
-    if (IsKeyDown(KEY_W) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{-1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
-    if (IsKeyDown(KEY_S) && p->cam.position.y >= 0) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{1, 0, 0.0001}, TRACKING_SPEED / 2.0f);
-    if (IsKeyDown(KEY_A)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, 1}, TRACKING_SPEED / 2.0f);
-    if (IsKeyDown(KEY_D)) p->cam.position = Vector3RotateByAxisAngle(p->cam.position, Vector3{0, 0, -1}, TRACKING_SPEED / 2.0f);
-    if (IsKeyDown(KEY_LEFT_BRACKET) && p->cam.fovy <= 90.f) p->cam.fovy += 1.f;
-    if (IsKeyDown(KEY_RIGHT_BRACKET) && p->cam.fovy >= 5.f) p->cam.fovy -= 1.f;
-
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         p->marker = p->crosshair;
     }
+    if (IsKeyPressed(KEY_LEFT_BRACKET) && p->cam.fovy <= 128.f) p->cam.fovy *= 2.0f;
+    if (IsKeyPressed(KEY_RIGHT_BRACKET) && p->cam.fovy >= 4.f) p->cam.fovy /= 2.0f;
 }
 
 void drawIndicator3D(Vector3 pos, Color color) {

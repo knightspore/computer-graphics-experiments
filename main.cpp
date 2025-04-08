@@ -15,6 +15,12 @@ Globe *g;
 
 void update() {
     if (IsKeyPressed(KEY_BACKSLASH)) DEBUG = !DEBUG;
+    if (DEBUG) {
+        if (IsKeyDown(KEY_W)) p->cam.position = Vector3Add(p->cam.position, Vector3{0, -1, 0});
+        if (IsKeyDown(KEY_A)) p->cam.position = Vector3Add(p->cam.position, Vector3{-1, 0, 0});
+        if (IsKeyDown(KEY_S)) p->cam.position = Vector3Add(p->cam.position, Vector3{0, 1, 0});
+        if (IsKeyDown(KEY_D)) p->cam.position = Vector3Add(p->cam.position, Vector3{1, 0, 0});
+    }
     UpdateGlobe(g);
     UpdatePlayer(p);
 }
@@ -29,6 +35,7 @@ void draw() {
     EndMode3D();
 
     if (DEBUG) {
+        // Draw World Debugs
         BeginMode3D(p->cam);
         DrawGrid(100, 100.0f);
         DrawLine3D(Vector3{-10000, 0, 0}, Vector3{10000, 0, 0}, RED);   // X-axis
@@ -39,6 +46,8 @@ void draw() {
         if (IsCursorHidden()) {
             ShowCursor();
         }
+
+        // Draw Debug Gui
         rlImGuiBegin();
         bool open = false;
         if (ImGui::Begin("Settings", &DEBUG)) {
@@ -49,6 +58,7 @@ void draw() {
             ImGui::SliderFloat("Target x", &p->cam.target.x, -100.0f, 100.0f);
             ImGui::SliderFloat("Target y", &p->cam.target.y, -100.0f, 100.0f);
             ImGui::SliderFloat("Target z", &p->cam.target.z, -100.0f, 100.0f);
+            ImGui::SliderFloat("Cam fovy", &p->cam.fovy, 1.0f, 180.0f);
         }
         ImGui::End();
         rlImGuiEnd();
