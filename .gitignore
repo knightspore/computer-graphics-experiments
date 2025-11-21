@@ -3,8 +3,7 @@ satellite
 satellite.dSYM
 
 # Deps
-rlimgui
-imgui
+# rlimgui and imgui are now submodules, not ignored
 
 # Coverage etc.
 imgui.ini
