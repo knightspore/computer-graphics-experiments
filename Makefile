@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -Wno-misleading-indentation -Wno-unused-variable -g
+CFLAGS=-std=c++23 -Wall -Wextra -Werror -Wno-missing-field-initializers -Wno-misleading-indentation -Wno-unused-variable -g -I./imgui -I./rlimgui
 COVFLAGS=-ftest-coverage -fprofile-arcs -coverage
 LDFLAGS=-lraylib 
 INFILES=main.cpp player.cpp globe.cpp \
