@@ -1,7 +1,10 @@
+#define STB_PERLIN_IMPLEMENTATION
+#include "stb_perlin.h"
 #include <raylib.h>
 #include <raymath.h>
 #include <stdlib.h>
 
+#define SEED 1000
 #define SIZE 60
 #define MD 20
 #define SM 10
