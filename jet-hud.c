@@ -34,7 +34,7 @@ void drawInstruments(Instruments *i) { // Replace with sprites
     // Target
     Vector2 target = GetMousePosition();
     DrawCircleLinesV(target, SM, i->color);
-    DrawLineV((Vector2){target.x, target.y - SM}, (Vector2){target.x, target.y - SM * 3}, i->color);
+    DrawLineV((Vector2){target.x, target.y - SM}, (Vector2){target.x, target.y - SM * 4}, i->color);
     DrawLineV((Vector2){target.x - SM, target.y}, (Vector2){target.x - SM * 3, target.y}, i->color);
     DrawLineV((Vector2){target.x + SM, target.y}, (Vector2){target.x + SM * 3, target.y}, i->color);
 
@@ -45,7 +45,7 @@ void drawInstruments(Instruments *i) { // Replace with sprites
     DrawLineV(hStart, (Vector2){hStart.x, hStart.y + MD}, i->color);
     DrawLineV((Vector2){GetScreenWidth() - SIZE - MD, GetScreenHeight() / 2.0 + i->pitch}, hEnd, i->color);
     DrawLineV(hEnd, (Vector2){hEnd.x, hEnd.y + MD}, i->color);
-    DrawText(TextFormat("[ %2.f ]", i->pitch), GetScreenWidth() - SIZE - MD, GetScreenHeight() / 2.0 + i->pitch - MD, TEXTSIZE, i->color);
+    DrawText(TextFormat("[ %2.0f ]", i->pitch), GetScreenWidth() - SIZE - MD, GetScreenHeight() / 2.0 + i->pitch - MD, TEXTSIZE, i->color);
 
     // Vertical Tracking
     DrawLineV((Vector2){GetScreenWidth() / 2.0 + i->yaw, SIZE}, (Vector2){GetScreenWidth() / 2.0 + i->yaw, SIZE + MD}, i->color);
@@ -71,9 +71,33 @@ void updateMap(Map *m, Instruments *i) {
 }
 
 void drawMap(Map *m) {
-    for (int y = 0; y < GetScreenHeight(); y += MD) {
-        for (int x = 0; x < GetScreenWidth(); x += MD) {
-            DrawPixel(x + m->track.x, y + m->track.y, Fade(BLUE, 0.5));
+    for (int y = -GetScreenHeight(); y < GetScreenHeight() * 2.0; y += SM) {
+        for (int x = -GetScreenWidth(); x < GetScreenWidth() * 2.0; x += SM) {
+            float noise = stb_perlin_noise3_seed((float)x / 200.0f, (float)y / 200.0f, 0.0f, 0.0f, 0.0f, 0.0f, SEED);
+            float fade;
+            switch ((int)(noise * 10)) {
+            case 0:
+            case 1:
+                fade = 0.1f;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                fade = 0.3f;
+                break;
+            case 5:
+            case 6:
+                fade = 0.5f;
+                break;
+            case 7:
+            case 8:
+                fade = 0.7f;
+                break;
+            default:
+                fade = 1.0f;
+                break;
+            }
+            DrawPixel(x + m->track.x, y + m->track.y, Fade(RAYWHITE, fade));
         }
     }
 }
