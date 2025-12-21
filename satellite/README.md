@@ -1,5 +1,7 @@
 # Satellite
 
+<img src="satellite_example.mp4">
+
 A fun experiment based on a game idea: You are a satellite operator listening in on peoples' conversations.
 
 I wanted a semi-realistic satellite height, and a semi-realistic spin of the earth, so I went with 2000km (somewhere between Low Earth Orbit and Medium Earth Oribt satellites) with a few levels of zoom, and matched the earth's rotation accordingly. It ends up being a lot faster than I thought, but seems pretty realistic overall.
