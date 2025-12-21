@@ -1,6 +1,8 @@
 # Satellite
 
-<img src="satellite_example.mp4">
+<video controls>
+    <source src="satellite_example.mp4" type="video/mp4">
+</video>
 
 A fun experiment based on a game idea: You are a satellite operator listening in on peoples' conversations.
 
