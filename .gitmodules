@@ -1,0 +1,6 @@
+[submodule "satellite/rlimgui"]
+	path = satellite/rlimgui
+	url = https://github.com/raylib-extras/rlImGui.git
+[submodule "satellite/imgui"]
+	path = satellite/imgui
+	url = https://github.com/ocornut/imgui
