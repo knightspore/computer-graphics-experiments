@@ -1,10 +1,8 @@
 # Satellite
 
-<video controls>
-    <source src="https://github.com/knightspore/computer-graphics-experiments/raw/refs/heads/main/satellite/satellite_example.mp4" type="video/mp4">
-</video>
-
 A fun experiment based on a game idea: You are a satellite operator listening in on peoples' conversations.
+
+![Screenshot](./example.png)
 
 I wanted a semi-realistic satellite height, and a semi-realistic spin of the earth, so I went with 2000km (somewhere between Low Earth Orbit and Medium Earth Oribt satellites) with a few levels of zoom, and matched the earth's rotation accordingly. It ends up being a lot faster than I thought, but seems pretty realistic overall.
 
