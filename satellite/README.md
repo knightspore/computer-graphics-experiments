@@ -1,7 +1,7 @@
 # Satellite
 
 <video controls>
-    <source src="satellite_example.mp4" type="video/mp4">
+    <source src="https://github.com/knightspore/computer-graphics-experiments/raw/refs/heads/main/satellite/satellite_example.mp4" type="video/mp4">
 </video>
 
 A fun experiment based on a game idea: You are a satellite operator listening in on peoples' conversations.
