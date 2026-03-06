@@ -2,11 +2,11 @@ CC=gcc
 CFLAGS=-std=c2x -Wall -Wextra -Werror
 LDFLAGS=-lraylib -lm
 
-build: jet-hud.c
-	$(CC) jet-hud.c $(CFLAGS) $(LDFLAGS) -o jet-hud
+build: watcher.c
+	$(CC) watcher.c $(CFLAGS) $(LDFLAGS) -o watcher
 
 build-strict:
-	$(CC) jet-hud.c $(CFLAGS) -pedantic $(LDFLAGS) -o jet-hud
+	$(CC) watcher.c $(CFLAGS) -pedantic $(LDFLAGS) -o watcher
 
 coverage:
 	make clean
@@ -14,10 +14,10 @@ coverage:
 	gcovr .
 
 run: 
-	./jet-hud
+	./watcher
 
 clean: 
-	rm -f ./jet-hud
+	rm -f ./watcher
 
 all: clean build run
 cover: clean build coverage

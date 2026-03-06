@@ -106,7 +106,7 @@ int main(void) {
     Instruments *i = newInstruments();
     Map *m = newMap();
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
-    InitWindow(800, 800, "jet-hud");
+    InitWindow(800, 800, "watcher");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetTargetFPS(60);
     HideCursor();
