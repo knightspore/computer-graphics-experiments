@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-std=c2x -Wall -Wextra -Werror -g -ftest-coverage -fprofile-arcs -coverage
+CFLAGS=-std=c2x -Wall -Wextra -Werror
 LDFLAGS=-lraylib -lm
 
 build: jet-hud.c
